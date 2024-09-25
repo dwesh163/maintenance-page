@@ -14,15 +14,22 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Get Latest Release
+        id: get_release
+        run: |
+          latest_release=$(curl -s https://api.github.com/repos/${{ github.repository }}/releases/latest | jq -r .tag_name)
+          echo "Latest release: $latest_release"
+          echo "::set-output name=latest_release::$latest_release"
+
       - name: Login to Docker Hub
         env:
-          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }} # GitHub PAT
+          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
         run: echo "$DOCKERHUB_TOKEN" | docker login -u "${{ github.repository_owner }}" --password-stdin
 
       - name: Build Docker image
         run: |
-          docker build . -f Dockerfile -t "${{ github.repository_owner }}/maintenance-page:latest"
+          docker build . -f Dockerfile -t "${{ github.repository_owner }}/maintenance-page:${{ steps.get_release.outputs.latest_release }}"
 
       - name: Push Docker image
         run: |
-          docker push "${{ github.repository_owner }}/maintenance-page:latest"
+          docker push "${{ github.repository_owner }}/maintenance-page:${{ steps.get_release.outputs.latest_release }}"
