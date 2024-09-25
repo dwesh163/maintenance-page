@@ -9,8 +9,6 @@ const __dirname = path.dirname(__filename);
 
 const distPath = path.join(__dirname, 'dist');
 
-console.log(distPath);
-
 app.get('/', (req, res) => {
 	res.status(503).sendFile(path.join(distPath, 'index.html'));
 });
