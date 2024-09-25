@@ -29,4 +29,6 @@ jobs:
               uses: docker/build-push-action@v6
               with:
                   push: true
-                  tags: ${{ github.repository_owner }}/${{ github.event.repository.name }}:${{ env.latest_release }}
+                  tags: |
+                      ${{ github.repository_owner }}/${{ github.event.repository.name }}:${{ env.latest_release }}
+                      ${{ github.repository_owner }}/${{ github.event.repository.name }}:latest
