@@ -12,7 +12,7 @@ RUN npm run build
 
 RUN npm prune --production
 
-RUN find . -type d \( -name 'dist' -o -name 'node_modules' -o -name 'server.js' -o -name 'package.json' \) -prune -o -exec rm -rf {} +
+RUN rm -frv !(dist|node_modules|server.js|package.json)
 
 EXPOSE 8080
 
